@@ -1,4 +1,5 @@
 import json
+
 """ 
 Day Planner
     V1
@@ -12,32 +13,40 @@ Day Planner
     V4
     - Input suggested activities for the day and day planner will put together a sample day with all events and take into account previous timeframes (+ fav times)
 """
-
+todo_list = []
 def new_activity():
+    # Gather details
     activity = input("What's today's first activity? ")
     activity_starttime = input("What time are you planning to begin " + activity + "? ")
     activity_endtime = input("What time will " + activity + " end? ")
 
-def view_day():    
-    print("So far, your day looks like: " +  + "-" + activity_endtime + ": " + activity)
+    # Add activity to todo_list
+    todo_list.append({
+        "activity": activity,
+        "start_time": activity_starttime,
+        "end_time": activity_endtime
+    })
 
-print("Welcome to Day Planner \n1. View your day \n2. Add activity \n3. Exit")
-choice = input("Enter a number: ")
-if choice == 1:
-    view_day()
-elif choice == 2:
-    new_activity()
-else:
-    exit
+def view_day():
+    if not todo_list:
+        print("Your day is currently empty")
+    else:
+        print("So far, your day looks like:")
+        for item in todo_list:
+            print(f"{item['start_time']} - {item['end_time']}: {item['activity']}")
+
+choice = 0
+while choice != "3":
+    print("Welcome to Day Planner \n1. View your day \n2. Add activity \n3. Exit")
+    choice = input("Enter a number: ")
+    if choice == "1":
+        view_day()
+    elif choice == "2":
+        new_activity()
+    else:
+        exit
 
 
-
-
-todo_list = [
-    {"activity": activity,
-     "start_time": activity_starttime,
-     "end_time": activity_endtime}
-]
 
 with open('todo_list.json', 'w') as file:
     json.dump(todo_list, file)
