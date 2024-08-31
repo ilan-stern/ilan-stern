@@ -1,4 +1,3 @@
-import json
 import tkinter as tk
 from datetime import datetime
 from tkinter import messagebox
@@ -35,8 +34,7 @@ def new_activity():
         if not activity:
             messagebox.showerror("Input error", "Please enter today's first activity")
             return
-    else:
-        if not activity:
+    elif not activity:
             messagebox.showerror("Input Error", "Please enter another activity for today.")
             return
 
@@ -44,25 +42,20 @@ def new_activity():
     activity_endtime = get_time_input(end_time_entry)
 
     if activity and activity_starttime and activity_endtime:
-        
     # Add activity to todo_list
         todo_list.append({
             "activity": activity,
             "start_time": activity_starttime,
             "end_time": activity_endtime
         })
+        todo_list.sort(key=lambda x: x['start_time'])
         update_day_view()
         clear_entries()
 
-def view_day():
-    if not todo_list:
-        messagebox.showinfo("Day Planner", "Your day is currently empty!")
-    else:
-        update_day_view()
-        
 
 def update_day_view():
     day_view.delete(1.0, tk.END)
+
     if not todo_list:
         day_view.insert(tk.END, "Your day is currently empty\n")
     else:
@@ -83,7 +76,7 @@ root.title("Day Planner")
 
 # Activity input
 activity_label_text = tk.StringVar()
-activity_label_text.set("What's today's first activity? ")
+activity_label_text.set("Activity Name: ")
 activity_label = tk.Label(root, textvariable=activity_label_text)
 activity_label.grid(row=0, column=0, padx=0, pady=5)
 
@@ -104,10 +97,6 @@ end_time_entry.grid(row=2, column=1, padx=10, pady=5)
 add_button = tk.Button(root, text="Add Activity", command=new_activity)
 add_button.grid(row=3, column=0, columnspan=2, pady=10)
 
-# View Day button
-view_button = tk.Button(root, text="View Day", command=view_day)
-view_button.grid(row=4, column=0, columnspan=2, pady=5)
-
 # Day view
 day_view = tk.Text(root, height=10, width=40)
 day_view.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
@@ -119,19 +108,6 @@ exit_button.grid(row=6, column=0, columnspan=2, pady=5)
 # Start the main loop
 root.mainloop()
 
-"""
-while choice != "3":
-    print("\nWelcome to Day Planner \n1. View your day \n2. Add activity \n3. Exit")
-    choice = input("Enter a number: ")
-    if choice == "1":
-        view_day()
-    elif choice == "2":
-        new_activity()
-    elif choice == "3":
-        print("Exiting Day Planner. Have a great day!")
-    else:
-        print("Invalid choice, pleas enter 1, 2, or 3.")
-"""
 
 
 """with open('todo_list.json', 'w') as file:
@@ -139,9 +115,3 @@ while choice != "3":
 """
 
 
-"""print("\nSo far, your day looks like:\n")
-        for item in todo_list:
-            start_time_str = item['start_time'].strftime("%H:%M")
-            end_time_str = item['end_time'].strftime("%H:%M")
-            print(f"{start_time_str} - {end_time_str}: {item['activity']}")
-"""
